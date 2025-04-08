@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { Video } from 'expo-av';
 import { useRouter } from 'expo-router';
@@ -13,7 +14,8 @@ import Animated, {
   withSequence,
   withTiming,
   interpolate,
-  Extrapolate
+  Extrapolate,
+  runOnJS
 } from 'react-native-reanimated';
 
 export default function WelcomeScreen() {
@@ -25,6 +27,10 @@ export default function WelcomeScreen() {
   const buttonOffset = useSharedValue(0);
   const arrowsOffset = useSharedValue(0);
   
+  const navigateToHome = () => {
+    router.push('/(auth)/welcome');
+  };
+
   // Start the arrows animation when component mounts
   React.useEffect(() => {
     arrowsOffset.value = withRepeat(
@@ -44,7 +50,8 @@ export default function WelcomeScreen() {
     .onEnd(() => {
       if (buttonOffset.value > 100) {
         buttonOffset.value = withSpring(200, { damping: 15 });
-        router.push('/home');
+        // Use runOnJS to call navigation function from the gesture handler
+        runOnJS(navigateToHome)();
       } else {
         buttonOffset.value = withSpring(0);
       }
@@ -104,18 +111,33 @@ export default function WelcomeScreen() {
           
           <View style={styles.optionsGrid}>
             <Pressable style={[styles.option, styles.activeOption]}>
-              <Camera size={32} color="#9EFFCB" style={styles.optionIcon} />
-              <Text style={styles.optionText}>Director</Text>
+              <LinearGradient
+                colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+                style={styles.optionGradient}
+              >
+                <Camera size={32} color="#9EFFCB" style={styles.optionIcon} />
+                <Text style={styles.optionText}>Director</Text>
+              </LinearGradient>
             </Pressable>
             
             <Pressable style={styles.option}>
-              <User size={32} color="#fff" style={styles.optionIcon} />
-              <Text style={styles.optionText}>Actor</Text>
+              <LinearGradient
+                colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
+                style={styles.optionGradient}
+              >
+                <User size={32} color="#fff" style={styles.optionIcon} />
+                <Text style={styles.optionText}>Actor</Text>
+              </LinearGradient>
             </Pressable>
             
             <Pressable style={styles.option}>
-              <Users size={32} color="#fff" style={styles.optionIcon} />
-              <Text style={styles.optionText}>Model</Text>
+              <LinearGradient
+                colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
+                style={styles.optionGradient}
+              >
+                <Users size={32} color="#fff" style={styles.optionIcon} />
+                <Text style={styles.optionText}>Model</Text>
+              </LinearGradient>
             </Pressable>
           </View>
 
@@ -129,7 +151,7 @@ export default function WelcomeScreen() {
             <GestureDetector gesture={panGesture}>
               <Animated.View style={[styles.searchButtonContainer, buttonStyle]}>
                 <LinearGradient
-                  colors={['#9EFFCB', '#3DD598']}
+                  colors={['rgba(158, 255, 203, 0.9)', 'rgba(61, 213, 152, 0.9)']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.searchButton}
@@ -203,19 +225,28 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   option: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    padding: 20,
-    borderRadius: 20,
     width: '30%',
-    alignItems: 'center',
+    borderRadius: 20,
+    overflow: 'hidden',
     ...Platform.select({
       web: {
         cursor: 'pointer',
       },
     }),
   },
+  optionGradient: {
+    padding: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backdropFilter: 'blur(10px)',
+  },
   activeOption: {
-    backgroundColor: 'rgba(158, 255, 203, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(158, 255, 203, 0.3)',
+    borderRadius: 20,
   },
   optionIcon: {
     marginBottom: 12,
@@ -226,18 +257,21 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk-Bold',
   },
   searchTrack: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 30,
     overflow: 'hidden',
     position: 'relative',
     height: 56,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   searchTrackBackground: {
     position: 'absolute',
     top: 0,
     left: '50%',
     bottom: 0,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backdropFilter: 'blur(10px)',
   },
   arrowsContainer: {
     position: 'absolute',
@@ -265,6 +299,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    backdropFilter: 'blur(10px)',
     ...Platform.select({
       web: {
         cursor: 'grab',
