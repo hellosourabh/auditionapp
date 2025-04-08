@@ -31,15 +31,14 @@ export default function WelcomeScreen() {
     router.push('/(auth)/welcome');
   };
 
-  // Start the arrows animation when component mounts
   React.useEffect(() => {
     arrowsOffset.value = withRepeat(
       withSequence(
         withTiming(10, { duration: 1000 }),
         withTiming(0, { duration: 1000 })
       ),
-      -1, // Infinite repetition
-      true // Reverse animation
+      -1,
+      true
     );
   }, []);
   
@@ -50,7 +49,6 @@ export default function WelcomeScreen() {
     .onEnd(() => {
       if (buttonOffset.value > 100) {
         buttonOffset.value = withSpring(200, { damping: 15 });
-        // Use runOnJS to call navigation function from the gesture handler
         runOnJS(navigateToHome)();
       } else {
         buttonOffset.value = withSpring(0);
@@ -112,10 +110,10 @@ export default function WelcomeScreen() {
           <View style={styles.optionsGrid}>
             <Pressable style={[styles.option, styles.activeOption]}>
               <LinearGradient
-                colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+                colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
                 style={styles.optionGradient}
               >
-                <Camera size={32} color="#9EFFCB" style={styles.optionIcon} />
+                <Camera size={32} color="#FF6347" style={styles.optionIcon} />
                 <Text style={styles.optionText}>Director</Text>
               </LinearGradient>
             </Pressable>
@@ -151,7 +149,7 @@ export default function WelcomeScreen() {
             <GestureDetector gesture={panGesture}>
               <Animated.View style={[styles.searchButtonContainer, buttonStyle]}>
                 <LinearGradient
-                  colors={['rgba(158, 255, 203, 0.9)', 'rgba(61, 213, 152, 0.9)']}
+                  colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.searchButton}
@@ -245,7 +243,7 @@ const styles = StyleSheet.create({
   },
   activeOption: {
     borderWidth: 1,
-    borderColor: 'rgba(158, 255, 203, 0.3)',
+    borderColor: 'rgba(255, 99, 71, 0.3)',
     borderRadius: 20,
   },
   optionIcon: {
@@ -293,6 +291,9 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 30,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 99, 71, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   searchButton: {
     flexDirection: 'row',
@@ -307,14 +308,14 @@ const styles = StyleSheet.create({
     }),
   },
   searchButtonText: {
-    color: '#000',
+    color: '#fff',
     fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
     letterSpacing: -0.3,
   },
   arrowIcon: {
     marginLeft: 8,
-    color: '#000',
+    color: '#fff',
     fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
   },

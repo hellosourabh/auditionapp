@@ -71,7 +71,7 @@ export default function SignUpScreen() {
 
             <Pressable style={styles.signupButton}>
               <LinearGradient
-                colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+                colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
                 style={styles.buttonGradient}
               >
                 <Text style={styles.signupText}>Create Account</Text>
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#3DD598',
+    borderColor: '#FF6347',
   },
   termsText: {
     color: '#fff',
@@ -171,14 +171,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   termsLink: {
-    color: '#3DD598',
+    color: '#FF6347',
   },
   signupButton: {
     borderRadius: 28,
     overflow: 'hidden',
     marginTop: 16,
     borderWidth: 1,
-    borderColor: 'rgba(158, 255, 203, 0.3)',
+    borderColor: 'rgba(255, 99, 71, 0.3)',
   },
   buttonGradient: {
     height: 56,
@@ -200,6 +200,6 @@ const styles = StyleSheet.create({
     color: '#rgba(255,255,255,0.7)',
   },
   signinLink: {
-    color: '#3DD598',
+    color: '#FF6347',
   },
 });

@@ -66,7 +66,7 @@ export default function SignInScreen() {
 
             <Pressable style={styles.loginButton}>
               <LinearGradient
-                colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+                colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
                 style={styles.buttonGradient}
               >
                 <Text style={styles.loginText}>Login</Text>
@@ -161,14 +161,14 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#3DD598',
+    borderColor: '#FF6347',
   },
   rememberText: {
     color: '#fff',
     fontSize: 14,
   },
   forgotText: {
-    color: '#3DD598',
+    color: '#FF6347',
     fontSize: 14,
   },
   loginButton: {
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 16,
     borderWidth: 1,
-    borderColor: 'rgba(158, 255, 203, 0.3)',
+    borderColor: 'rgba(255, 99, 71, 0.3)',
   },
   buttonGradient: {
     height: 56,
@@ -198,6 +198,6 @@ const styles = StyleSheet.create({
     color: '#rgba(255,255,255,0.7)',
   },
   signupLink: {
-    color: '#3DD598',
+    color: '#FF6347',
   },
 });
