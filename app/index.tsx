@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { Video } from 'expo-av';
 import { useRouter } from 'expo-router';
@@ -18,8 +18,11 @@ import Animated, {
   runOnJS
 } from 'react-native-reanimated';
 
+type UserType = 'director' | 'actor' | 'model';
+
 export default function WelcomeScreen() {
   const router = useRouter();
+  const [selectedType, setSelectedType] = useState<UserType>('director');
   const [fontsLoaded] = useFonts({
     'SpaceGrotesk-Bold': SpaceGrotesk_700Bold,
   });
@@ -105,36 +108,75 @@ export default function WelcomeScreen() {
         </View>
 
         <View style={styles.selectionContainer}>
-          <Text style={styles.chooseText}>Who Are You?</Text>
+          <View style={styles.chooseTextContainer}>
+            <Text style={styles.chooseTextBold}>Who</Text>
+            <Text style={styles.chooseText}>are you?</Text>
+          </View>
           
-          <View style={styles.optionsGrid}>
-            <Pressable style={[styles.option, styles.activeOption]}>
+          <View style={styles.optionsContainer}>
+            <Pressable 
+              style={[styles.option, selectedType === 'director' && styles.activeOption]}
+              onPress={() => setSelectedType('director')}
+            >
               <LinearGradient
-                colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
+                colors={selectedType === 'director' 
+                  ? ['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']
+                  : ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
                 style={styles.optionGradient}
               >
-                <Camera size={32} color="#FF6347" style={styles.optionIcon} />
-                <Text style={styles.optionText}>Director</Text>
+                <View style={styles.optionContent}>
+                  <Camera 
+                    size={selectedType === 'director' ? 40 : 32} 
+                    color={selectedType === 'director' ? "#FF6347" : "#fff"} 
+                  />
+                  <Text style={[styles.optionText, selectedType === 'director' && styles.activeOptionText]}>
+                    Director
+                  </Text>
+                </View>
               </LinearGradient>
             </Pressable>
             
-            <Pressable style={styles.option}>
+            <Pressable 
+              style={[styles.option, selectedType === 'actor' && styles.activeOption]}
+              onPress={() => setSelectedType('actor')}
+            >
               <LinearGradient
-                colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
+                colors={selectedType === 'actor' 
+                  ? ['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']
+                  : ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
                 style={styles.optionGradient}
               >
-                <User size={32} color="#fff" style={styles.optionIcon} />
-                <Text style={styles.optionText}>Actor</Text>
+                <View style={styles.optionContent}>
+                  <User 
+                    size={selectedType === 'actor' ? 40 : 32} 
+                    color={selectedType === 'actor' ? "#FF6347" : "#fff"} 
+                  />
+                  <Text style={[styles.optionText, selectedType === 'actor' && styles.activeOptionText]}>
+                    Actor
+                  </Text>
+                </View>
               </LinearGradient>
             </Pressable>
             
-            <Pressable style={styles.option}>
+            <Pressable 
+              style={[styles.option, selectedType === 'model' && styles.activeOption]}
+              onPress={() => setSelectedType('model')}
+            >
               <LinearGradient
-                colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
+                colors={selectedType === 'model' 
+                  ? ['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']
+                  : ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
                 style={styles.optionGradient}
               >
-                <Users size={32} color="#fff" style={styles.optionIcon} />
-                <Text style={styles.optionText}>Model</Text>
+                <View style={styles.optionContent}>
+                  <Users 
+                    size={selectedType === 'model' ? 40 : 32} 
+                    color={selectedType === 'model' ? "#FF6347" : "#fff"} 
+                  />
+                  <Text style={[styles.optionText, selectedType === 'model' && styles.activeOptionText]}>
+                    Model
+                  </Text>
+                </View>
               </LinearGradient>
             </Pressable>
           </View>
@@ -210,49 +252,67 @@ const styles = StyleSheet.create({
   selectionContainer: {
     marginBottom: 40,
   },
-  chooseText: {
-    fontSize: 28,
+  chooseTextContainer: {
+    marginBottom: 32,
+  },
+  chooseTextBold: {
+    fontSize: 42,
     fontFamily: 'SpaceGrotesk-Bold',
     color: '#fff',
-    marginBottom: 24,
     letterSpacing: -0.3,
+    lineHeight: 48,
   },
-  optionsGrid: {
+  chooseText: {
+    fontSize: 42,
+    color: '#fff',
+    letterSpacing: -0.3,
+    lineHeight: 48,
+    opacity: 0.9,
+  },
+  optionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 32,
+    gap: 16,
   },
   option: {
-    width: '30%',
-    borderRadius: 20,
+    flex: 1,
+    height: 180,
+    borderRadius: 40,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    transform: [{ scale: 0.85 }],
     ...Platform.select({
       web: {
         cursor: 'pointer',
       },
     }),
   },
+  activeOption: {
+    transform: [{ scale: 1 }],
+    borderColor: 'rgba(255, 99, 71, 0.3)',
+  },
   optionGradient: {
+    height: '100%',
     padding: 20,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     backdropFilter: 'blur(10px)',
   },
-  activeOption: {
-    borderWidth: 1,
-    borderColor: 'rgba(255, 99, 71, 0.3)',
-    borderRadius: 20,
-  },
-  optionIcon: {
-    marginBottom: 12,
+  optionContent: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    gap: 12,
   },
   optionText: {
     color: '#fff',
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Bold',
+  },
+  activeOptionText: {
+    fontSize: 18,
+    color: '#FF6347',
   },
   searchTrack: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
