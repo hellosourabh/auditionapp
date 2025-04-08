@@ -65,7 +65,12 @@ export default function SignInScreen() {
             </View>
 
             <Pressable style={styles.loginButton}>
-              <Text style={styles.loginText}>Login</Text>
+              <LinearGradient
+                colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+                style={styles.buttonGradient}
+              >
+                <Text style={styles.loginText}>Login</Text>
+              </LinearGradient>
             </Pressable>
 
             <View style={styles.signupPrompt}>
@@ -137,6 +142,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     color: '#fff',
     fontSize: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   rememberContainer: {
     flexDirection: 'row',
@@ -165,15 +172,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   loginButton: {
-    backgroundColor: '#3DD598',
-    height: 56,
     borderRadius: 28,
+    overflow: 'hidden',
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(158, 255, 203, 0.3)',
+  },
+  buttonGradient: {
+    height: 56,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 16,
+    backdropFilter: 'blur(10px)',
   },
   loginText: {
-    color: '#000',
+    color: '#fff',
     fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
   },

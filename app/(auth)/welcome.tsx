@@ -42,14 +42,24 @@ export default function WelcomeScreen() {
             style={styles.signupButton}
             onPress={() => router.push('/signup')}
           >
-            <Text style={styles.signupText}>Sign up</Text>
+            <LinearGradient
+              colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+              style={styles.buttonGradient}
+            >
+              <Text style={styles.signupText}>Sign up</Text>
+            </LinearGradient>
           </Pressable>
           
           <Pressable 
             style={styles.signinButton}
             onPress={() => router.push('/signin')}
           >
-            <Text style={styles.signinText}>Sign in</Text>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
+              style={styles.buttonGradient}
+            >
+              <Text style={styles.signinText}>Sign in</Text>
+            </LinearGradient>
           </Pressable>
         </View>
       </View>
@@ -102,24 +112,27 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 40,
   },
-  signupButton: {
-    backgroundColor: '#3DD598',
+  buttonGradient: {
     height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
+    backdropFilter: 'blur(10px)',
+  },
+  signupButton: {
+    borderRadius: 28,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(158, 255, 203, 0.3)',
   },
   signinButton: {
-    backgroundColor: 'transparent',
-    height: 56,
     borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   signupText: {
-    color: '#000',
+    color: '#fff',
     fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
     letterSpacing: -0.3,
