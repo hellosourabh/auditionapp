@@ -6,9 +6,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { Camera, Users, User } from 'lucide-react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, { 
-  useAnimatedStyle, 
-  useSharedValue, 
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
   withSpring,
   withRepeat,
   withSequence,
@@ -29,7 +29,7 @@ export default function WelcomeScreen() {
 
   const buttonOffset = useSharedValue(0);
   const arrowsOffset = useSharedValue(0);
-  
+
   const navigateToHome = () => {
     router.push('/(auth)/welcome');
   };
@@ -44,7 +44,7 @@ export default function WelcomeScreen() {
       true
     );
   }, []);
-  
+
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       buttonOffset.value = Math.max(0, Math.min(e.translationX, 200));
@@ -95,7 +95,7 @@ export default function WelcomeScreen() {
         resizeMode="cover"
         isMuted
       />
-      
+
       <LinearGradient
         colors={['transparent', 'rgba(0,0,0,0.9)']}
         style={styles.gradient}
@@ -112,76 +112,82 @@ export default function WelcomeScreen() {
             <Text style={styles.chooseTextBold}>Who</Text>
             <Text style={styles.chooseText}>are you?</Text>
           </View>
-          
+
           <View style={styles.optionsContainer}>
-            <Pressable 
-              style={[styles.option, selectedType === 'director' && styles.activeOption]}
+            <Pressable
+              style={[styles.option, selectedType === 'director' ? styles.activeOption : styles.inactiveOption, { marginRight: 8 }]}
               onPress={() => setSelectedType('director')}
             >
               <LinearGradient
-                colors={selectedType === 'director' 
+                colors={selectedType === 'director'
                   ? ['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']
                   : ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
                 style={styles.optionGradient}
               >
                 <View style={styles.optionContent}>
-                  <Camera 
-                    size={selectedType === 'director' ? 40 : 32} 
-                    color={selectedType === 'director' ? "#FF6347" : "#fff"} 
+                  <Camera
+                    size={selectedType === 'director' ? 40 : 32}
+                    color={selectedType === 'director' ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)"}
                   />
-                  <Text style={[styles.optionText, selectedType === 'director' && styles.activeOptionText]}>
-                    Director
-                  </Text>
+                  <View style={{width: '100%'}}>
+                    <Text numberOfLines={1} style={[styles.optionText, selectedType === 'director' && styles.activeOptionText]}>
+                      Director
+                    </Text>
+                  </View>
                 </View>
               </LinearGradient>
             </Pressable>
-            
-            <Pressable 
-              style={[styles.option, selectedType === 'actor' && styles.activeOption]}
+
+            <Pressable
+              style={[styles.option, selectedType === 'actor' ? styles.activeOption : styles.inactiveOption, { marginLeft: 8, marginRight: 8 }]}
               onPress={() => setSelectedType('actor')}
             >
               <LinearGradient
-                colors={selectedType === 'actor' 
+                colors={selectedType === 'actor'
                   ? ['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']
                   : ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
                 style={styles.optionGradient}
               >
                 <View style={styles.optionContent}>
-                  <User 
-                    size={selectedType === 'actor' ? 40 : 32} 
-                    color={selectedType === 'actor' ? "#FF6347" : "#fff"} 
+                  <User
+                    size={selectedType === 'actor' ? 40 : 32}
+                    color={selectedType === 'actor' ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)"}
                   />
-                  <Text style={[styles.optionText, selectedType === 'actor' && styles.activeOptionText]}>
-                    Actor
-                  </Text>
+                  <View style={{width: '100%'}}>
+                    <Text numberOfLines={1} style={[styles.optionText, selectedType === 'actor' && styles.activeOptionText]}>
+                      Actor
+                    </Text>
+                  </View>
                 </View>
               </LinearGradient>
             </Pressable>
-            
-            <Pressable 
-              style={[styles.option, selectedType === 'model' && styles.activeOption]}
+
+            <Pressable
+              style={[styles.option, selectedType === 'model' ? styles.activeOption : styles.inactiveOption, { marginLeft: 8 }]}
               onPress={() => setSelectedType('model')}
             >
               <LinearGradient
-                colors={selectedType === 'model' 
+                colors={selectedType === 'model'
                   ? ['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']
                   : ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
                 style={styles.optionGradient}
               >
                 <View style={styles.optionContent}>
-                  <Users 
-                    size={selectedType === 'model' ? 40 : 32} 
-                    color={selectedType === 'model' ? "#FF6347" : "#fff"} 
+                  <Users
+                    size={selectedType === 'model' ? 40 : 32}
+                    color={selectedType === 'model' ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)"}
                   />
-                  <Text style={[styles.optionText, selectedType === 'model' && styles.activeOptionText]}>
-                    Model
-                  </Text>
+                  <View style={{width: '100%'}}>
+                    <Text numberOfLines={1} style={[styles.optionText, selectedType === 'model' && styles.activeOptionText]}>
+                      Model
+                    </Text>
+                  </View>
                 </View>
               </LinearGradient>
             </Pressable>
           </View>
 
-          <View style={styles.searchTrack}>
+          <View style={[styles.searchTrack, { width: '70%', alignSelf: 'center' }]}>
             <Animated.View style={[styles.searchTrackBackground, trackStyle]} />
             <Animated.View style={[styles.arrowsContainer, arrowsStyle]}>
               <Text style={styles.trackArrow}>›</Text>
@@ -235,12 +241,17 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'flex-start',
+    alignSelf: 'flex-start',
+    width: '100%',
+    marginLeft: 20,
   },
   title: {
     fontSize: 48,
     fontFamily: 'SpaceGrotesk-Bold',
     color: '#fff',
     letterSpacing: -0.5,
+    textAlign: 'left',
+    alignSelf: 'flex-start',
   },
   subtitle: {
     fontSize: 32,
@@ -248,12 +259,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     opacity: 0.9,
     letterSpacing: -0.3,
+    textAlign: 'left',
+    alignSelf: 'flex-start',
   },
   selectionContainer: {
     marginBottom: 40,
   },
   chooseTextContainer: {
     marginBottom: 32,
+    paddingLeft: 20,
   },
   chooseTextBold: {
     fontSize: 42,
@@ -272,17 +286,20 @@ const styles = StyleSheet.create({
   optionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
     marginBottom: 32,
-    gap: 16,
+    gap: 0,
+    paddingLeft: 20,
+    marginRight: -24,
+    width: '100%',
   },
   option: {
     flex: 1,
-    height: 180,
     borderRadius: 40,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    transform: [{ scale: 0.85 }],
+    minWidth: 110,
+    maxWidth: '33%',
     ...Platform.select({
       web: {
         cursor: 'pointer',
@@ -290,12 +307,19 @@ const styles = StyleSheet.create({
     }),
   },
   activeOption: {
-    transform: [{ scale: 1 }],
+    height: 180,
+    transform: [{ scale: 1.05 }],
     borderColor: 'rgba(255, 99, 71, 0.3)',
+  },
+  inactiveOption: {
+    height: 145,
+    transform: [{ scale: 0.98 }],
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    width: '100%',
   },
   optionGradient: {
     height: '100%',
-    padding: 20,
+    padding: 16,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     backdropFilter: 'blur(10px)',
   },
@@ -304,22 +328,26 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     gap: 12,
+    width: '100%',
+    minWidth: 0,
   },
   optionText: {
-    color: '#fff',
-    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 15,
     fontFamily: 'SpaceGrotesk-Bold',
+    width: '100%',
   },
   activeOptionText: {
     fontSize: 18,
-    color: '#FF6347',
+    color: '#FFFFFF',
+    width: '100%',
   },
   searchTrack: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 30,
+    borderRadius: 25,
     overflow: 'hidden',
     position: 'relative',
-    height: 56,
+    height: 50,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
@@ -342,14 +370,14 @@ const styles = StyleSheet.create({
   },
   trackArrow: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 20,
     opacity: 0.5,
     fontFamily: 'SpaceGrotesk-Bold',
   },
   searchButtonContainer: {
-    width: '50%',
-    height: 56,
-    borderRadius: 30,
+    width: '45%',
+    height: 50,
+    borderRadius: 25,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 99, 71, 0.3)',
@@ -360,6 +388,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    paddingHorizontal: 15,
+    paddingVertical: 4,
     backdropFilter: 'blur(10px)',
     ...Platform.select({
       web: {
@@ -369,14 +399,14 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'SpaceGrotesk-Bold',
-    letterSpacing: -0.3,
+    letterSpacing: 0.5,
   },
   arrowIcon: {
-    marginLeft: 8,
+    marginLeft: 15,
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'SpaceGrotesk-Bold',
   },
 });
