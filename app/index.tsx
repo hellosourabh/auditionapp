@@ -31,8 +31,23 @@ export default function WelcomeScreen() {
   const arrowsOffset = useSharedValue(0);
 
   const navigateToHome = () => {
-    router.push('/(auth)/welcome');
+    // Add a small delay before navigation to allow animation to complete
+    setTimeout(() => {
+      // Reset button position before navigating
+      buttonOffset.value = 0;
+      router.push('/(auth)/welcome');
+    }, 300);
   };
+
+  // Reset button position when component mounts or unmounts
+  React.useEffect(() => {
+    buttonOffset.value = 0;
+
+    return () => {
+      // Reset when unmounting
+      buttonOffset.value = 0;
+    };
+  }, []);
 
   React.useEffect(() => {
     arrowsOffset.value = withRepeat(
@@ -47,11 +62,11 @@ export default function WelcomeScreen() {
 
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
-      buttonOffset.value = Math.max(0, Math.min(e.translationX, 200));
+      buttonOffset.value = Math.max(0, Math.min(e.translationX, 120));
     })
     .onEnd(() => {
-      if (buttonOffset.value > 100) {
-        buttonOffset.value = withSpring(200, { damping: 15 });
+      if (buttonOffset.value > 60) {
+        buttonOffset.value = withSpring(120, { damping: 15 });
         runOnJS(navigateToHome)();
       } else {
         buttonOffset.value = withSpring(0);
@@ -65,13 +80,13 @@ export default function WelcomeScreen() {
   const trackStyle = useAnimatedStyle(() => ({
     width: interpolate(
       buttonOffset.value,
-      [0, 200],
+      [0, 120],
       ['50%', '100%'],
       Extrapolate.CLAMP
     ),
     opacity: interpolate(
       buttonOffset.value,
-      [0, 200],
+      [0, 120],
       [0.15, 0.3],
       Extrapolate.CLAMP
     ),
@@ -187,7 +202,7 @@ export default function WelcomeScreen() {
             </Pressable>
           </View>
 
-          <View style={[styles.searchTrack, { width: '70%', alignSelf: 'center' }]}>
+          <View style={[styles.searchTrack, { width: '55%', alignSelf: 'center' }]}>
             <Animated.View style={[styles.searchTrackBackground, trackStyle]} />
             <Animated.View style={[styles.arrowsContainer, arrowsStyle]}>
               <Text style={styles.trackArrow}>›</Text>
@@ -202,7 +217,7 @@ export default function WelcomeScreen() {
                   end={{ x: 1, y: 1 }}
                   style={styles.searchButton}
                 >
-                  <Text style={styles.searchButtonText}>Continue</Text>
+                  <Text style={styles.searchButtonText}>Go</Text>
                   <Text style={styles.arrowIcon}>››</Text>
                 </LinearGradient>
               </Animated.View>
@@ -375,7 +390,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk-Bold',
   },
   searchButtonContainer: {
-    width: '45%',
+    width: '40%',
     height: 50,
     borderRadius: 25,
     overflow: 'hidden',
@@ -388,7 +403,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     backdropFilter: 'blur(10px)',
     ...Platform.select({
@@ -399,12 +414,12 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   arrowIcon: {
-    marginLeft: 15,
+    marginLeft: 8,
     color: '#fff',
     fontSize: 16,
     fontFamily: 'SpaceGrotesk-Bold',
