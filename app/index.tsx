@@ -39,7 +39,7 @@ export default function WelcomeScreen() {
     }, 300);
   };
 
-  // Reset button position when component mounts or unmounts
+  // Reset button position when component mounts or unmounts to fix navigation issues
   React.useEffect(() => {
     buttonOffset.value = 0;
 
