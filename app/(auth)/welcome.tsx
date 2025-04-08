@@ -34,7 +34,7 @@ export default function WelcomeScreen() {
       <View style={styles.content}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Everyone should</Text>
-          <Text style={styles.subtitle}>live with a little more green</Text>
+          <Text style={styles.subtitle}>live with a little more glam</Text>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -43,7 +43,7 @@ export default function WelcomeScreen() {
             onPress={() => router.push('/signup')}
           >
             <LinearGradient
-              colors={['rgba(158, 255, 203, 0.2)', 'rgba(158, 255, 203, 0.1)']}
+              colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
               style={styles.buttonGradient}
             >
               <Text style={styles.signupText}>Sign up</Text>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(158, 255, 203, 0.3)',
+    borderColor: 'rgba(255, 99, 71, 0.3)',
   },
   signinButton: {
     borderRadius: 28,
