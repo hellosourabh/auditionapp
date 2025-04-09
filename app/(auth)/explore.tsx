@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable, Platform } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable, Platform, Animated } from 'react-native';
 import { Video } from 'expo-av';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Search, LayoutGrid, Heart, MessageSquare } from 'lucide-react-native';
+import { Search, LayoutGrid, Heart, MessageSquare, Menu } from 'lucide-react-native';
 import { TwoSliders } from '@/components/TwoSliders';
+import { BottomNavBar } from '@/components/BottomNavBar';
+import { Sidebar } from '@/components/Sidebar';
 import { useFonts, SpaceGrotesk_700Bold, SpaceGrotesk_400Regular } from '@expo-google-fonts/space-grotesk';
 
 const HORSE_DATA = [
@@ -46,9 +48,54 @@ const HORSE_DATA = [
 export default function ExploreScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
   const [favorites, setFavorites] = useState<string[]>(
     HORSE_DATA.filter(horse => horse.isFavorite).map(horse => horse.id)
   );
+
+  // Animation values
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+  // State to control actual visibility after animation completes
+  const [searchVisible, setSearchVisible] = useState(false);
+
+  // Handle search popup animations
+  useEffect(() => {
+    if (isSearchActive) {
+      setSearchVisible(true);
+      // Animate in
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        })
+      ]).start();
+    } else if (searchVisible) {
+      // Animate out
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 0.8,
+          duration: 250,
+          useNativeDriver: true,
+        })
+      ]).start(() => {
+        setSearchVisible(false);
+      });
+    }
+  }, [isSearchActive]);
 
   const [fontsLoaded] = useFonts({
     'SpaceGrotesk-Bold': SpaceGrotesk_700Bold,
@@ -65,6 +112,11 @@ export default function ExploreScreen() {
         ? prev.filter(fId => fId !== id)
         : [...prev, id]
     );
+  };
+
+  // Function to handle closing the search with animation
+  const closeSearch = () => {
+    setIsSearchActive(false);
   };
 
   return (
@@ -84,7 +136,9 @@ export default function ExploreScreen() {
         />
         <View style={styles.headerContent}>
           <View style={styles.topIcons}>
-            <TwoSliders color="rgba(255, 255, 255, 0.7)" size={24} />
+            <Pressable onPress={() => setIsSidebarOpen(true)}>
+              <TwoSliders color="rgba(255, 255, 255, 0.7)" size={24} />
+            </Pressable>
             <MessageSquare color="rgba(255, 255, 255, 0.7)" size={24} />
           </View>
 
@@ -144,8 +198,13 @@ export default function ExploreScreen() {
           </View>
         ))}
       </ScrollView>
-      {isSearchActive && (
-        <View style={styles.searchOverlay}>
+      {searchVisible && (
+        <Animated.View
+          style={[
+            styles.searchOverlay,
+            { opacity: fadeAnim }
+          ]}
+        >
           <BlurView
             style={[StyleSheet.absoluteFill, styles.blurView]}
             intensity={10}
@@ -153,7 +212,7 @@ export default function ExploreScreen() {
           >
             <Pressable
               style={styles.overlayBackground}
-              onPress={() => setIsSearchActive(false)}
+              onPress={closeSearch}
             >
               <View style={styles.frostTexture} />
               <LinearGradient
@@ -164,7 +223,16 @@ export default function ExploreScreen() {
               />
             </Pressable>
           </BlurView>
-          <View style={styles.searchPopup}>
+          <Animated.View
+            style={[
+              styles.searchPopup,
+              {
+                transform: [
+                  { scale: scaleAnim }
+                ]
+              }
+            ]}
+          >
             <BlurView intensity={80} tint="dark" style={styles.searchPopupContent}>
               <Search color="#fff" size={20} style={styles.searchIcon} />
               <TextInput
@@ -175,13 +243,24 @@ export default function ExploreScreen() {
                 onChangeText={setSearchQuery}
                 autoFocus
               />
-              <Pressable onPress={() => setIsSearchActive(false)}>
+              <Pressable onPress={closeSearch}>
                 <Text style={styles.cancelButton}>Cancel</Text>
               </Pressable>
             </BlurView>
-          </View>
-        </View>
+          </Animated.View>
+        </Animated.View>
       )}
+
+      <BottomNavBar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        userName="Vaishali"
+      />
     </View>
   );
 }
@@ -190,6 +269,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9F9F9',
+    paddingBottom: 100, // Add padding for the bottom navigation bar
   },
   header: {
     height: '40%',
@@ -216,6 +296,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
+  },
+  rightIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   sliderContainer: {
     flexDirection: 'row',
@@ -339,6 +423,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     marginTop: -40,
+    paddingBottom: 20,
   },
   contentContainer: {
     paddingTop: 20,
