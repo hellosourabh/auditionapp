@@ -7,6 +7,7 @@ import { Search, LayoutGrid, Heart, MessageSquare, Menu } from 'lucide-react-nat
 import { TwoSliders } from '@/components/TwoSliders';
 import { BottomNavBar } from '@/components/BottomNavBar';
 import { Sidebar } from '@/components/Sidebar';
+import { ProductDetail } from '@/components/ProductDetail';
 import { useFonts, SpaceGrotesk_700Bold, SpaceGrotesk_400Regular } from '@expo-google-fonts/space-grotesk';
 
 const HORSE_DATA = [
@@ -50,6 +51,8 @@ export default function ExploreScreen() {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
   const [favorites, setFavorites] = useState<string[]>(
     HORSE_DATA.filter(horse => horse.isFavorite).map(horse => horse.id)
   );
@@ -119,6 +122,17 @@ export default function ExploreScreen() {
     setIsSearchActive(false);
   };
 
+  // Function to handle opening the product detail
+  const openProductDetail = (product: any) => {
+    setSelectedProduct(product);
+    setIsProductDetailOpen(true);
+  };
+
+  // Function to handle closing the product detail
+  const closeProductDetail = () => {
+    setIsProductDetailOpen(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -162,7 +176,11 @@ export default function ExploreScreen() {
         showsVerticalScrollIndicator={false}
       >
         {HORSE_DATA.map((horse) => (
-          <View key={horse.id} style={styles.card}>
+          <Pressable
+            key={horse.id}
+            style={styles.card}
+            onPress={() => openProductDetail(horse)}
+          >
             <View style={styles.cardContent}>
               <Pressable
                 style={styles.favoriteButton}
@@ -195,7 +213,7 @@ export default function ExploreScreen() {
                 />
               </View>
             </View>
-          </View>
+          </Pressable>
         ))}
       </ScrollView>
       {searchVisible && (
@@ -261,6 +279,14 @@ export default function ExploreScreen() {
         onClose={() => setIsSidebarOpen(false)}
         userName="Vaishali"
       />
+
+      {selectedProduct && (
+        <ProductDetail
+          isVisible={isProductDetailOpen}
+          onClose={closeProductDetail}
+          product={selectedProduct}
+        />
+      )}
     </View>
   );
 }
