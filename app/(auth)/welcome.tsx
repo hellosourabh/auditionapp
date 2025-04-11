@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { Video } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useFonts, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import { useFonts, SpaceGrotesk_700Bold, SpaceGrotesk_400Regular } from '@expo-google-fonts/space-grotesk';
+import { BlurView } from 'expo-blur';
+import { ChevronRight, Plane } from 'lucide-react-native';
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const [fontsLoaded] = useFonts({
     'SpaceGrotesk-Bold': SpaceGrotesk_700Bold,
+    'SpaceGrotesk-Regular': SpaceGrotesk_400Regular,
   });
 
   if (!fontsLoaded) {
@@ -25,41 +28,61 @@ export default function WelcomeScreen() {
         resizeMode="cover"
         isMuted
       />
-      
+
       <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.9)']}
+        colors={['transparent', 'rgba(0,0,0,0.7)']}
         style={styles.gradient}
       />
 
       <View style={styles.content}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Everyone should</Text>
-          <Text style={styles.subtitle}>live with a little more glam</Text>
+        {/* Logo and App Name */}
+        <View style={styles.logoContainer}>
+          <View style={styles.logoCircle}>
+            <LinearGradient
+              colors={['#4a80f5', '#3b68d9']}
+              style={StyleSheet.absoluteFill}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            />
+            <Plane color="#FFFFFF" size={28} />
+            <View style={styles.sparkle1} />
+            <View style={styles.sparkle2} />
+            <View style={styles.sparkle3} />
+          </View>
+          <Text style={styles.appName}>Vast Voyages</Text>
         </View>
 
-        <View style={styles.buttonContainer}>
-          <Pressable 
-            style={styles.signupButton}
-            onPress={() => router.push('/signup')}
-          >
+        {/* Glassmorphism Message Box */}
+        <View style={styles.messageBoxContainer}>
+          <BlurView intensity={20} tint="dark" style={styles.blurView}>
             <LinearGradient
-              colors={['rgba(255, 99, 71, 0.2)', 'rgba(139, 0, 0, 0.1)']}
-              style={styles.buttonGradient}
-            >
-              <Text style={styles.signupText}>Sign up</Text>
-            </LinearGradient>
-          </Pressable>
-          
-          <Pressable 
-            style={styles.signinButton}
+              colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
+              style={StyleSheet.absoluteFill}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            />
+            <View style={styles.messageContent}>
+              <Text style={styles.messageHeading}>Share Your Travel Experience</Text>
+              <Text style={styles.messageSubheading}>
+                Share your best travel experience with friends, colleagues, and your loved one using this travel blog app.
+              </Text>
+            </View>
+          </BlurView>
+        </View>
+
+        {/* Circular Navigation Button */}
+        <View style={styles.navButtonContainer}>
+          <Pressable
+            style={styles.navButton}
             onPress={() => router.push('/signin')}
           >
             <LinearGradient
-              colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)']}
-              style={styles.buttonGradient}
-            >
-              <Text style={styles.signinText}>Sign in</Text>
-            </LinearGradient>
+              colors={['#4a80f5', '#3b68d9']}
+              style={StyleSheet.absoluteFill}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            />
+            <ChevronRight color="#FFFFFF" size={24} />
           </Pressable>
         </View>
       </View>
@@ -92,55 +115,124 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 60,
   },
-  titleContainer: {
-    alignItems: 'flex-start',
+
+  // Logo and App Name Styles
+  logoContainer: {
+    alignItems: 'center',
+    marginTop: 20,
   },
-  title: {
-    fontSize: 32,
-    fontFamily: 'SpaceGrotesk-Bold',
-    color: '#fff',
-    letterSpacing: -0.5,
-  },
-  subtitle: {
-    fontSize: 32,
-    fontFamily: 'SpaceGrotesk-Bold',
-    color: '#fff',
-    opacity: 0.9,
-    letterSpacing: -0.3,
-  },
-  buttonContainer: {
-    gap: 16,
-    marginBottom: 40,
-  },
-  buttonGradient: {
-    height: 56,
-    borderRadius: 28,
+  logoCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backdropFilter: 'blur(10px)',
+    overflow: 'hidden',
+    shadowColor: '#4a80f5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    elevation: 8,
+    position: 'relative',
   },
-  signupButton: {
-    borderRadius: 28,
+  sparkle1: {
+    position: 'absolute',
+    width: 8,
+    height: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    top: 10,
+    right: 12,
+    opacity: 0.8,
+  },
+  sparkle2: {
+    position: 'absolute',
+    width: 6,
+    height: 6,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 3,
+    bottom: 12,
+    left: 14,
+    opacity: 0.6,
+  },
+  sparkle3: {
+    position: 'absolute',
+    width: 4,
+    height: 4,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 2,
+    top: 30,
+    left: 10,
+    opacity: 0.7,
+  },
+  appName: {
+    fontSize: 24,
+    fontFamily: 'SpaceGrotesk-Bold',
+    color: '#FFFFFF',
+    marginTop: 12,
+    letterSpacing: 0.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+
+  // Message Box Styles
+  messageBoxContainer: {
+    marginHorizontal: 10,
+    borderRadius: 24,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  blurView: {
+    borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 99, 71, 0.3)',
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
-  signinButton: {
-    borderRadius: 28,
+  messageContent: {
+    padding: 24,
+  },
+  messageHeading: {
+    fontSize: 28,
+    fontFamily: 'SpaceGrotesk-Bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 16,
+    letterSpacing: 0.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  messageSubheading: {
+    fontSize: 16,
+    fontFamily: 'SpaceGrotesk-Regular',
+    color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+
+  // Navigation Button Styles
+  navButtonContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  navButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
     overflow: 'hidden',
-    borderWidth: 1,
+    shadowColor: '#4a80f5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    elevation: 8,
+    borderWidth: 2,
     borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  signupText: {
-    color: '#fff',
-    fontSize: 18,
-    fontFamily: 'SpaceGrotesk-Bold',
-    letterSpacing: -0.3,
-  },
-  signinText: {
-    color: '#fff',
-    fontSize: 18,
-    fontFamily: 'SpaceGrotesk-Bold',
-    letterSpacing: -0.3,
   },
 });

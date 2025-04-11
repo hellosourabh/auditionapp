@@ -159,6 +159,14 @@ export const ProductDetail = ({ isVisible, onClose, product }: ProductDetailProp
         >
 
             <View style={styles.productInfo}>
+              <BlurView intensity={10} tint="default" style={[StyleSheet.absoluteFill, {borderTopLeftRadius: 30, borderTopRightRadius: 30}]}>
+                <LinearGradient
+                  colors={['rgba(183, 140, 101, 0.15)', 'rgba(183, 140, 101, 0.1)']}
+                  style={StyleSheet.absoluteFill}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                />
+              </BlurView>
               <Text style={styles.productTitle}>{product.title}</Text>
 
               <View style={styles.sizeContainer}>
@@ -357,18 +365,19 @@ const styles = StyleSheet.create({
     marginTop: 0,
     position: 'relative',
     zIndex: 15,
-    backgroundColor: 'rgba(183, 140, 101, 0.95)',
+    backgroundColor: 'rgba(183, 140, 101, 0.2)', // More transparent background
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    overflow: 'hidden',
   },
   productTitle: {
     color: '#FFFFFF',
     fontSize: 28,
     fontFamily: 'SpaceGrotesk-Bold',
     marginBottom: 16,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    textShadowRadius: 4,
   },
   sizeContainer: {
     flexDirection: 'row',
@@ -413,10 +422,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   descriptionText: {
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(255, 255, 255, 0.9)',
     fontSize: 13,
     fontFamily: 'SpaceGrotesk-Regular',
     lineHeight: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   footerContainer: {
     position: 'absolute',

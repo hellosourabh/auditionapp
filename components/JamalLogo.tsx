@@ -7,51 +7,49 @@ interface AuditionLogoProps {
   height?: number;
 }
 
-export const AuditionLogo = ({ width = 350, height = 350 }: AuditionLogoProps) => {
+export const JamalLogo = ({ width = 350, height = 350 }: AuditionLogoProps) => {
   // Create vertical stack of hollow text (5-6 copies going down)
   const verticalLayers = [
     { dy: 0, opacity: 1.0 },    // Main text
-    { dy: 25, opacity: 0.7 },   // First copy below
-    { dy: 50, opacity: 0.5 },   // Second copy below
-    { dy: 75, opacity: 0.3 },   // Third copy below
-    { dy: 100, opacity: 0.2 },  // Fourth copy below
-    { dy: 125, opacity: 0.1 },  // Fifth copy below
+    { dy: 40, opacity: 0.9 },   // First copy below
+    { dy: 80, opacity: 0.8 },   // Second copy below
+    { dy: 120, opacity: 0.7 },  // Third copy below
+    { dy: 160, opacity: 0.5 },  // Fourth copy below
+    { dy: 200, opacity: 0.3 },  // Fifth copy below
   ];
 
   return (
     <View style={styles.container}>
-      <Svg width={width} height={height} viewBox="0 0 350 350" preserveAspectRatio="xMidYMid meet">
+      <Svg width={width} height={height} viewBox="0 0 350 350">
         {/* Main solid text at the top */}
         <Text
-          x="175"
-          y="150"
-          fontSize="75"
+          x="10"
+          y="70"
+          fontSize="90"
           fontWeight="900"
           fontFamily="Arial-Black, Arial"
-          letterSpacing="0"
+          letterSpacing="2"
           fill="#FFFFFF"
           strokeWidth="1"
           stroke="#FFFFFF"
-          textAnchor="middle"
         >
-          AUDITION
+          JAMAL
         </Text>
 
         {/* Create the vertical stack of hollow text copies */}
         {verticalLayers.slice(1).map((layer, index) => (
           <Text
             key={index}
-            x="175"
-            y={150 + layer.dy}
-            fontSize="75"
+            x="10"
+            y={70 + layer.dy}
+            fontSize="90"
             fontWeight="900"
             fontFamily="Arial-Black, Arial"
-            letterSpacing="0"
+            letterSpacing="2"
             fill="transparent"
             stroke="#FFFFFF"
             strokeWidth="2"
             opacity={layer.opacity}
-            textAnchor="middle"
           >
             AUDITION
           </Text>
