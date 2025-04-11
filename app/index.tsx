@@ -5,8 +5,9 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { useFonts, SpaceGrotesk_700Bold, SpaceGrotesk_400Regular } from '@expo-google-fonts/space-grotesk';
-import { ChevronRight, Car, Truck, Bike } from 'lucide-react-native';
+import { ChevronRight, Theater, Camera, Music, Mic, Users } from 'lucide-react-native';
 import { AuditionLogo } from '@/components/AuditionLogo';
+import { AuditionCircleLogo } from '@/components/AuditionCircleLogo';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -21,11 +22,11 @@ export default function WelcomeScreen() {
   }
 
   const categories = [
-    { id: 'acting', name: 'Acting', icon: <Car color="#FFFFFF" size={20} /> },
-    { id: 'modeling', name: 'Modeling', icon: <Car color="#FFFFFF" size={20} /> },
-    { id: 'dancing', name: 'Dancing', icon: <Car color="#FFFFFF" size={20} /> },
-    { id: 'singing', name: 'Singing', icon: <Truck color="#FFFFFF" size={20} /> },
-    { id: 'extras', name: 'Extras', icon: <Bike color="#FFFFFF" size={20} /> },
+    { id: 'acting', name: 'Acting', icon: <Theater color="#FFFFFF" size={20} /> },
+    { id: 'modeling', name: 'Modeling', icon: <Camera color="#FFFFFF" size={20} /> },
+    { id: 'dancing', name: 'Dancing', icon: <Music color="#FFFFFF" size={20} /> },
+    { id: 'singing', name: 'Singing', icon: <Mic color="#FFFFFF" size={20} /> },
+    { id: 'extras', name: 'Extras', icon: <Users color="#FFFFFF" size={20} /> },
   ];
 
   return (
@@ -34,7 +35,7 @@ export default function WelcomeScreen() {
 
       {/* Background Video */}
       <Video
-        source={{ uri: 'https://www.theauditionapp.com/wp-content/uploads/2025/04/a0efebd34e8fc9544a4120229b59b0a2.mp4' }}
+        source={{ uri: 'https://www.theauditionapp.com/wp-content/uploads/2025/04/5e128e1b36a5c63d030098fa8184d728.mp4' }}
         style={styles.video}
         shouldPlay
         isLooping
@@ -52,21 +53,10 @@ export default function WelcomeScreen() {
       <View style={styles.content}>
         {/* Top Section */}
         <View style={styles.topSection}>
-          {/* iOS Status Bar Styling (just for visual effect) */}
-          <View style={styles.statusBarIcons}>
-            <Text style={styles.timeText}>9:41</Text>
-            <View style={styles.notchArea} />
-            <View style={styles.batteryArea}>
-              <View style={styles.batteryIcon} />
-            </View>
+          {/* Logo in circle at the top */}
+          <View style={styles.logoCircleContainer}>
+            <AuditionCircleLogo size={100} />
           </View>
-
-          {/* Guest Enter Button */}
-          <Pressable style={styles.guestButton} onPress={() => router.push('/(auth)/signin')}>
-            <BlurView intensity={20} tint="dark" style={styles.guestButtonBlur}>
-              <Text style={styles.guestButtonText}>Guest enter</Text>
-            </BlurView>
-          </Pressable>
 
           {/* Brand Name with Grid Effect - positioned on one area of screen */}
           <View style={styles.brandContainer}>
@@ -82,17 +72,21 @@ export default function WelcomeScreen() {
 
         {/* Bottom Section - Car Categories */}
         <View style={styles.bottomSection}>
-          <BlurView intensity={40} tint="dark" style={styles.categoriesContainer}>
+          <BlurView intensity={25} tint="dark" style={styles.categoriesContainer}>
             <LinearGradient
-              colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0.9)']}
+              colors={['rgba(100, 100, 100, 0.7)', 'rgba(80, 80, 80, 0.8)']}
               style={StyleSheet.absoluteFill}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             />
 
-            <Text style={styles.categoriesTitle}>Choose your talent</Text>
+            {/* Inner border for more depth */}
+            <View style={styles.categoriesInnerBorder} />
 
-            <ScrollView
+            <View style={styles.categoriesContent}>
+              <Text style={styles.categoriesTitle}>Choose your talent</Text>
+
+              <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.categoriesScrollContent}
@@ -113,17 +107,14 @@ export default function WelcomeScreen() {
 
             {/* Navigation Controls */}
             <View style={styles.navigationControls}>
-              <Pressable style={styles.backButton}>
-                <Text style={styles.backButtonText}>Back</Text>
-              </Pressable>
-
               <Pressable
                 style={styles.nextButton}
                 onPress={() => router.push('/(auth)/signin')}
               >
                 <Text style={styles.nextButtonText}>Next</Text>
-                <ChevronRight color="#000" size={20} />
+                <ChevronRight color="#FFFFFF" size={20} />
               </Pressable>
+            </View>
             </View>
           </BlurView>
         </View>
@@ -164,64 +155,45 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 
-  // iOS Status Bar Styling
-  statusBarIcons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  // Logo in circle
+  logoCircleContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#000000',
     alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 20,
     marginBottom: 20,
-    paddingHorizontal: 10,
-  },
-  timeText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  notchArea: {
-    width: 120,
-    height: 20,
-  },
-  batteryArea: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  batteryIcon: {
-    width: 25,
-    height: 12,
     borderWidth: 1,
-    borderColor: '#FFFFFF',
-    borderRadius: 3,
-    marginLeft: 5,
-  },
-
-  // Guest Button
-  guestButton: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    borderRadius: 20,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
     overflow: 'hidden',
-    zIndex: 10,
   },
-  guestButtonBlur: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+  logoImageContainer: {
+    width: 70,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
-  guestButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontFamily: 'SpaceGrotesk-Regular',
+  logoImage: {
+    width: 85,
+    height: 85,
+  },
+  logoBlur: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   // Brand Styling
   brandContainer: {
     alignItems: 'center',
-    marginTop: 100, // Push content down more
+    marginTop: 80, // Reduced top margin to move content up
     position: 'relative',
-    height: 350, // Increased height for the larger logo
+    height: 300, // Reduced height to prevent pushing content down
     marginBottom: 20, // Less space below
   },
   logoWrapper: {
@@ -262,15 +234,36 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     overflow: 'hidden',
-    paddingTop: 30,
-    paddingBottom: 40,
+    paddingTop: 20,
+    paddingBottom: 30,
     paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderBottomWidth: 0,
+    position: 'relative',
+  },
+  categoriesInnerBorder: {
+    position: 'absolute',
+    top: 1,
+    left: 1,
+    right: 1,
+    bottom: 0,
+    borderTopLeftRadius: 29,
+    borderTopRightRadius: 29,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderBottomWidth: 0,
+    zIndex: 1,
+  },
+  categoriesContent: {
+    position: 'relative',
+    zIndex: 2,
   },
   categoriesTitle: {
     fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
     color: '#FFFFFF',
-    marginBottom: 20,
+    marginBottom: 15,
     textAlign: 'center',
   },
   categoriesScrollContent: {
@@ -283,7 +276,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 25,
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
@@ -291,6 +284,13 @@ const styles = StyleSheet.create({
   selectedCategoryPill: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderColor: 'rgba(255, 255, 255, 0.4)',
+    // Enhanced shadow for selected state but with inset shadow to prevent white line
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+    // Fix for white line in the middle
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowOffset: { width: 0, height: 1 },
   },
   categoryIconContainer: {
     width: 36,
@@ -310,9 +310,9 @@ const styles = StyleSheet.create({
   // Navigation Controls
   navigationControls: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 20,
     paddingHorizontal: 10,
   },
   backButton: {
@@ -328,19 +328,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#9AE66E',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 25,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    shadowColor: '#9AE66E',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
     width: 120,
+    alignSelf: 'center',
+    // Match active category pill shadow
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  nextButtonContainer: {
+    borderRadius: 25,
+    overflow: 'hidden',
+    width: 120,
+    alignSelf: 'center',
   },
   nextButtonText: {
-    color: '#000000',
+    color: '#FFFFFF',
     fontSize: 18,
     fontFamily: 'SpaceGrotesk-Bold',
     marginRight: 8,
