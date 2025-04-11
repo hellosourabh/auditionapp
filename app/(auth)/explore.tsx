@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable, Platform, Animated } from 'react-native';
 import { Video } from 'expo-av';
 import { BlurView } from 'expo-blur';
@@ -47,6 +48,7 @@ const HORSE_DATA = [
 ];
 
 export default function ExploreScreen() {
+  const { isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -133,8 +135,50 @@ export default function ExploreScreen() {
     setIsProductDetailOpen(false);
   };
 
+  // Create dynamic styles based on theme
+  const dynamicStyles = {
+    container: {
+      ...styles.container,
+      backgroundColor: isDark ? '#121212' : '#F9F9F9',
+    },
+    card: {
+      ...styles.card,
+      backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+      // Ensure these properties are explicitly set to preserve the card appearance
+      borderRadius: 30,
+      shadowColor: isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.3)',
+      shadowOffset: { width: 0, height: 14 },
+      shadowOpacity: 0.25,
+      shadowRadius: 20,
+      elevation: 12,
+      overflow: 'visible',
+    },
+    cardContent: {
+      ...styles.cardContent,
+      backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+      borderRadius: 30,
+      overflow: 'visible',
+    },
+    cardTitle: {
+      ...styles.cardTitle,
+      color: isDark ? '#FFFFFF' : '#333333',
+    },
+    cardLocation: {
+      ...styles.cardLocation,
+      color: isDark ? '#CCCCCC' : '#666666',
+    },
+    ownerName: {
+      ...styles.ownerName,
+      color: isDark ? '#CCCCCC' : '#666666',
+    },
+    favoriteButton: {
+      ...styles.favoriteButton,
+      backgroundColor: isDark ? 'rgba(50, 50, 50, 0.7)' : 'rgba(255, 255, 255, 0.7)',
+    },
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={dynamicStyles.container}>
       <View style={styles.header}>
         <Video
           source={{ uri: 'https://www.theauditionapp.com/wp-content/uploads/2025/04/a0efebd34e8fc9544a4120229b59b0a2.mp4' }}
@@ -178,12 +222,12 @@ export default function ExploreScreen() {
         {HORSE_DATA.map((horse) => (
           <Pressable
             key={horse.id}
-            style={styles.card}
+            style={dynamicStyles.card}
             onPress={() => openProductDetail(horse)}
           >
-            <View style={styles.cardContent}>
+            <View style={dynamicStyles.cardContent}>
               <Pressable
-                style={styles.favoriteButton}
+                style={dynamicStyles.favoriteButton}
                 onPress={() => toggleFavorite(horse.id)}
               >
                 <Heart
@@ -195,14 +239,14 @@ export default function ExploreScreen() {
 
               <View style={styles.cardMainContent}>
                 <View style={styles.cardText}>
-                  <Text style={styles.cardTitle}>{horse.title}</Text>
-                  <Text style={styles.cardLocation} numberOfLines={1} ellipsizeMode="tail">{horse.location}</Text>
+                  <Text style={dynamicStyles.cardTitle}>{horse.title}</Text>
+                  <Text style={dynamicStyles.cardLocation} numberOfLines={1} ellipsizeMode="tail">{horse.location}</Text>
                   <View style={styles.ownerContainer}>
                     <Image
                       source={{ uri: horse.owner.avatar }}
                       style={styles.ownerAvatar}
                     />
-                    <Text style={styles.ownerName}>{horse.owner.name}</Text>
+                    <Text style={dynamicStyles.ownerName}>{horse.owner.name}</Text>
                   </View>
                 </View>
 

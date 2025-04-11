@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Pressable, ScrollView, Animated } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Users, Monitor, Home, Music, Settings, HelpCircle, LogOut, X } from 'lucide-react-native';
+import { Users, Monitor, Home, Music, Settings, HelpCircle, LogOut, X, Moon, Sun } from 'lucide-react-native';
+import { useTheme } from '../app/context/ThemeContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface SidebarProps {
 export const Sidebar = ({ isOpen, onClose, userName = 'Vaishali' }: SidebarProps) => {
   const slideAnim = useRef(new Animated.Value(-300)).current;
   const [visible, setVisible] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     if (isOpen) {
@@ -116,6 +118,13 @@ export const Sidebar = ({ isOpen, onClose, userName = 'Vaishali' }: SidebarProps
                 <Settings color="#F9F9F9" size={22} style={styles.navIcon} />,
                 'Settings',
                 () => {}
+              )}
+              {renderNavItem(
+                isDark ?
+                  <Sun color="#F9F9F9" size={22} style={styles.navIcon} /> :
+                  <Moon color="#F9F9F9" size={22} style={styles.navIcon} />,
+                isDark ? 'Light Mode' : 'Dark Mode',
+                toggleTheme
               )}
               {renderNavItem(
                 <HelpCircle color="#F9F9F9" size={22} style={styles.navIcon} />,

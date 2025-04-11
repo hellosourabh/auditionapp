@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { Home, MessageSquare, ClipboardCheck, User, Star } from 'lucide-react-native';
+import { useTheme } from '../app/context/ThemeContext';
 
 interface BottomNavBarProps {
   activeTab: string;
@@ -8,6 +9,7 @@ interface BottomNavBarProps {
 }
 
 export const BottomNavBar = ({ activeTab, onTabChange }: BottomNavBarProps) => {
+  const { isDark } = useTheme();
   const renderIcon = (name: string, icon: JSX.Element, title: string, hasNewBadge: boolean = false) => {
     const isActive = activeTab === name;
 
@@ -20,12 +22,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }: BottomNavBarProps) => {
         onPress={() => onTabChange(name)}
       >
         {isActive ? (
-          <View style={styles.activeIconWrapper}>
+          <View style={dynamicStyles.activeIconWrapper}>
             <View style={styles.activeIconContent}>
               {icon}
               <Text style={styles.iconText}>{title}</Text>
             </View>
-            {hasNewBadge && <View style={styles.newBadge}><Text style={styles.newBadgeText}>New</Text></View>}
+            {hasNewBadge && <View style={dynamicStyles.newBadge}><Text style={dynamicStyles.newBadgeText}>New</Text></View>}
           </View>
         ) : (
           <View style={styles.inactiveIconWrapper}>
@@ -36,28 +38,48 @@ export const BottomNavBar = ({ activeTab, onTabChange }: BottomNavBarProps) => {
     );
   };
 
+  // Create dynamic styles based on theme
+  const dynamicStyles = {
+    container: {
+      ...styles.container,
+      backgroundColor: isDark ? '#1E1E1E' : '#FCFCFC',
+    },
+    activeIconWrapper: {
+      ...styles.activeIconWrapper,
+      backgroundColor: isDark ? '#333333' : '#0B0E1B',
+    },
+    newBadge: {
+      ...styles.newBadge,
+      backgroundColor: '#FDCB58',
+    },
+    newBadgeText: {
+      ...styles.newBadgeText,
+      color: isDark ? '#1E1E1E' : '#0B0E1B',
+    },
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={dynamicStyles.container}>
       <View style={styles.iconsContainer}>
         {renderIcon(
           'home',
-          <Home size={24} color={activeTab === 'home' ? '#FFFFFF' : '#2E2E2E'} />,
+          <Home size={24} color={activeTab === 'home' ? '#FFFFFF' : isDark ? '#CCCCCC' : '#2E2E2E'} />,
           'Home',
           true
         )}
         {renderIcon(
           'messaging',
-          <MessageSquare size={24} color={activeTab === 'messaging' ? '#FFFFFF' : '#2E2E2E'} />,
+          <MessageSquare size={24} color={activeTab === 'messaging' ? '#FFFFFF' : isDark ? '#CCCCCC' : '#2E2E2E'} />,
           'Messaging'
         )}
         {renderIcon(
           'applied',
-          <ClipboardCheck size={24} color={activeTab === 'applied' ? '#FFFFFF' : '#2E2E2E'} />,
+          <ClipboardCheck size={24} color={activeTab === 'applied' ? '#FFFFFF' : isDark ? '#CCCCCC' : '#2E2E2E'} />,
           'Applied'
         )}
         {renderIcon(
           'profile',
-          <User size={24} color={activeTab === 'profile' ? '#FFFFFF' : '#2E2E2E'} />,
+          <User size={24} color={activeTab === 'profile' ? '#FFFFFF' : isDark ? '#CCCCCC' : '#2E2E2E'} />,
           'Profile'
         )}
       </View>
