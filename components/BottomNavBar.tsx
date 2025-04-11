@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { Home, MessageSquare, ClipboardCheck, User, Star } from 'lucide-react-native';
 import { useTheme } from '../app/context/ThemeContext';
+import { useRouter } from 'expo-router';
 
 interface BottomNavBarProps {
   activeTab: string;
@@ -10,8 +11,21 @@ interface BottomNavBarProps {
 
 export const BottomNavBar = ({ activeTab, onTabChange }: BottomNavBarProps) => {
   const { isDark } = useTheme();
+  const router = useRouter();
   const renderIcon = (name: string, icon: JSX.Element, title: string, hasNewBadge: boolean = false) => {
     const isActive = activeTab === name;
+
+    const handlePress = () => {
+      onTabChange(name);
+
+      // Navigate to the appropriate screen based on the tab
+      if (name === 'messaging') {
+        router.push('/(auth)/messaging');
+      } else if (name === 'home') {
+        router.push('/(auth)/explore');
+      }
+      // Add other navigation routes as needed
+    };
 
     return (
       <Pressable
@@ -19,7 +33,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }: BottomNavBarProps) => {
           styles.iconContainer,
           isActive && styles.activeIconContainer
         ]}
-        onPress={() => onTabChange(name)}
+        onPress={handlePress}
       >
         {isActive ? (
           <View style={dynamicStyles.activeIconWrapper}>

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable, Platform, Animated } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable, Platform, Animated, BackHandler } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Video } from 'expo-av';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -49,6 +50,7 @@ const HORSE_DATA = [
 
 export default function ExploreScreen() {
   const { isDark } = useTheme();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -65,6 +67,23 @@ export default function ExploreScreen() {
 
   // State to control actual visibility after animation completes
   const [searchVisible, setSearchVisible] = useState(false);
+
+  // Handle hardware back button for product detail
+  useEffect(() => {
+    const backAction = () => {
+      if (isProductDetailOpen) {
+        // If product detail is open, close it
+        closeProductDetail();
+        return true; // Prevent default behavior
+      }
+      // Otherwise, let the default back behavior happen
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove(); // Clean up the event listener
+  }, [isProductDetailOpen]);
 
   // Handle search popup animations
   useEffect(() => {
@@ -146,11 +165,13 @@ export default function ExploreScreen() {
       backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
       // Ensure these properties are explicitly set to preserve the card appearance
       borderRadius: 30,
-      shadowColor: isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.3)',
-      shadowOffset: { width: 0, height: 14 },
-      shadowOpacity: 0.25,
-      shadowRadius: 20,
-      elevation: 12,
+      borderWidth: isDark ? 1 : 0,
+      borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'transparent',
+      shadowColor: isDark ? '#FFFFFF' : 'rgba(0, 0, 0, 0.3)',
+      shadowOffset: { width: 0, height: isDark ? 0 : 14 },
+      shadowOpacity: isDark ? 0.1 : 0.25,
+      shadowRadius: isDark ? 8 : 20,
+      elevation: isDark ? 4 : 12,
       overflow: 'visible',
     },
     cardContent: {
@@ -197,7 +218,9 @@ export default function ExploreScreen() {
             <Pressable onPress={() => setIsSidebarOpen(true)}>
               <TwoSliders color="rgba(255, 255, 255, 0.7)" size={24} />
             </Pressable>
-            <MessageSquare color="rgba(255, 255, 255, 0.7)" size={24} />
+            <Pressable onPress={() => router.push('/(auth)/messaging')}>
+              <MessageSquare color="rgba(255, 255, 255, 0.7)" size={24} />
+            </Pressable>
           </View>
 
           <Text style={styles.title}>Horse</Text>
